@@ -25,6 +25,9 @@ public class NinjaModel {
     @Column(unique = true)
     private String email;
 
+    @Column(name = "img_url")
+    private String imgUrl;
+
     private int idade;
 
     // Varios ninjas podem ter uma missão
