@@ -18,7 +18,7 @@ public class NinjaController {
     }
 
     // Mostrar todos os ninjas (CREATE)
-    @GetMapping("/todos")
+    @GetMapping("/listar")
     public String mostrarTodosOsNinjas() {
         return "Mostrar todos os ninjas";
     }
