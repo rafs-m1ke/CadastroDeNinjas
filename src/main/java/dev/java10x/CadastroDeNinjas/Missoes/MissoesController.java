@@ -1,34 +1,40 @@
 package dev.java10x.CadastroDeNinjas.Missoes;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/missoes")
 public class MissoesController {
 
+    @Autowired
+    private MissoesService missoesService;
+
     @GetMapping("/listar")
-    public String listarMissoes() {
-        return "Todas as missões";
+    public List<MissoesDTO> listarMissoes() {
+        return missoesService.listarMissoes();
     }
 
     @PostMapping("/criar")
-    public String criarMissao() {
-        return "Missão criada";
+    public MissoesDTO criarMissao(@RequestBody MissoesDTO missoesDTO) {
+        return missoesService.criarMissao(missoesDTO);
     }
 
-    @GetMapping("/missao_id")
-    public String mostrarMissaoPorId() {
-        return "Missão por id";
+    @GetMapping("/listar/{id}")
+    public MissoesDTO mostrarMissaoPorId(@PathVariable Long id) {
+        return missoesService.listarMissoesPorId(id);
     }
 
-    @PutMapping("/atualizar")
-    public String atualizarMissao() {
-        return "Missão atualizada";
+    @PatchMapping("/atualizar/{id}")
+    public MissoesDTO atualizarMissao(@PathVariable Long id, @RequestBody MissoesDTO missoesDTO) {
+        return missoesService.atualizarMissao(id, missoesDTO);
     }
 
-    @DeleteMapping("/deletar")
-    public String deletarMissao() {
-        return "Missão deletada";
+    @DeleteMapping("/deletar/{id}")
+    public void deletarMissao(@PathVariable Long id) {
+        missoesService.deletarMissao(id);
     }
 
 
