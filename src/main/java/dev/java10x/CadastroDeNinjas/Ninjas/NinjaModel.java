@@ -28,6 +28,8 @@ public class NinjaModel {
     @Column(name = "img_url")
     private String imgUrl;
 
+    private String rank;
+
     private int idade;
 
     // Varios ninjas podem ter uma missão

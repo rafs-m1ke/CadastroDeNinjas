@@ -12,19 +12,31 @@ public class NinjaService {
     @Autowired
     private NinjaRepository ninjaRepository;
 
+    @Autowired
+    private NinjaMapper ninjaMapper;
+
+
     // Listar todos os ninjas
-    public List<NinjaModel> listarNinjas() {
-        return ninjaRepository.findAll();
+    public List<NinjaDTO> listarNinjas() {
+        List<NinjaModel> ninjas = ninjaRepository.findAll();
+        return ninjas.stream()
+                .map(ninjaMapper::map)
+                .toList();
     }
 
     // Listar todos os meus ninjas por ID
-    public NinjaModel listarNinjasPorId(Long id) {
-        return ninjaRepository.findById(id).orElse(null);
+    public NinjaDTO listarNinjasPorId(Long id) {
+
+       return ninjaRepository.findById(id)
+               .map(ninjaMapper::map)
+               .orElse(null);
     }
 
     // Criar um novo ninja
-    public NinjaModel criarNinja(NinjaModel ninja) {
-        return ninjaRepository.save(ninja);
+    public NinjaDTO criarNinja(NinjaDTO ninjaDTO) {
+       NinjaModel ninja = ninjaMapper.map(ninjaDTO);
+       ninja = ninjaRepository.save(ninja);
+       return ninjaMapper.map(ninja);
     }
 
     // Deletar Ninja
@@ -33,12 +45,16 @@ public class NinjaService {
     }
 
     // Atualizar Ninja
-    public NinjaModel atualizarNinja(Long id, NinjaModel ninja) {
-        if (ninjaRepository.existsById(id)) {
-            ninja.setId(id);
-            return ninjaRepository.save(ninja);
+    public NinjaDTO atualizarNinja(Long id, NinjaDTO ninjaDTO) {
+        Optional<NinjaModel> ninjaExistente = ninjaRepository.findById(id);
+        if(ninjaExistente.isPresent()) {
+            NinjaModel ninjaAtualizado = ninjaMapper.map(ninjaDTO);
+            ninjaAtualizado.setId(id);
+            NinjaModel ninjaSalvo = ninjaRepository.save(ninjaAtualizado);
+            return ninjaMapper.map(ninjaSalvo);
+        } else {
+            return null;
         }
-        return null;
     }
 
 }
